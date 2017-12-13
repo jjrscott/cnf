@@ -1,5 +1,5 @@
 /* copy input to output; 1st version */
-#include <stdio.h>
+#include "stdio.h"
 
 int main(void)
 {

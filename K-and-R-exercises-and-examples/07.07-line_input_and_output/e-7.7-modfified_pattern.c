@@ -1,8 +1,8 @@
 /* Modify the pattern finding program of Chapter 5 to take its input from a set of 
    named files or, if no files are named as arguments, form the standard input. Should the
    file name be printed when a matching line is found? */
-#include <stdio.h>
-#include <string.h>
+#include "stdio.h"
+#include "string.h"
 
 #define MAXLINE 1000
 #define PATTERNLEN 100

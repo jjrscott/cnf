@@ -1,6 +1,6 @@
 /* Rewrite the temperature conversion program of Section 1.2 to 
    use a function. */
-#include <stdio.h>
+#include "stdio.h"
 
 float fahrenheit(int c);
 

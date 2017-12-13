@@ -1,8 +1,8 @@
 /* Replaces strings of blanks with the minimum number of tabs and blanks
    to achieve the same spacing  entab -m +n */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "stdio.h"
+#include "stdlib.h"
 
 #define TABSIZE 4    /* default tab size */
 

@@ -1,6 +1,6 @@
 /* Write the function strend(s,t), which returns 1 if the string t occurs at the
    end of the string s and zero otherwise. */
-#include <stdio.h>
+#include "stdio.h"
 
 int strend(char *, char *);
 

@@ -1,5 +1,5 @@
 /* count characters in input; 2nd version */
-#include <stdio.h>
+#include "stdio.h"
 
 int main(void)
 {

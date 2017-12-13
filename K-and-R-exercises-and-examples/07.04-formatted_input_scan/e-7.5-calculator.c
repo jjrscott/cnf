@@ -1,7 +1,7 @@
 /* Rewrite the postfix calculator of Chapter 4 to use scanf and/or sscanf to do
    do the input and number conversion. */
-#include <stdio.h>
-#include <ctype.h>
+#include "stdio.h"
+#include "ctype.h"
 
 #define MAXLINE 100
 

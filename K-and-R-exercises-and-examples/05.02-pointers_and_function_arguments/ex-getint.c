@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "stdio.h"
 
 #define MAXLEN 1000
 
@@ -18,7 +18,7 @@ int main(void)
   return 0;
 }
 
-#include <ctype.h>
+#include "ctype.h"
 
 int getch(void);
 void ungetch(int);

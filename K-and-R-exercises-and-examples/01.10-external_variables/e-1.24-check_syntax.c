@@ -2,7 +2,7 @@
    unbabanced parentheses, brakets and braces. Don't forget about quotes, both 
    single and double, escape sequences, and comments. (This program is hard
    if you do it in full generality.) */
-#include <stdio.h>
+#include "stdio.h"
 
 #define MAXLINE 1000 /* max input line size */
 char line[MAXLINE];  /*current input line*/

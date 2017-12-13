@@ -1,9 +1,9 @@
 /* Rewrite the program cat from Chapter 7 using read, write, open and close instead of
    their standard library equivalents. Perform experiments to determine the relative speed
    of the two versions. */
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include "stdio.h"
+#include "unistd.h"
+#include "fcntl.h"
 
 void error(char *, ...);
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-#include <stdarg.h>
+#include "stdarg.h"
 /* error print an error message and die */
 void error(char *fmt, ...)
 {

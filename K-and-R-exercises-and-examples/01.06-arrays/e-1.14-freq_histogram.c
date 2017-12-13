@@ -1,6 +1,6 @@
 /* Write a program to print a histogram of the frequencies of different 
    characters in its input. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define ALL_CHARS 26
 #define ALL_NUMS 10

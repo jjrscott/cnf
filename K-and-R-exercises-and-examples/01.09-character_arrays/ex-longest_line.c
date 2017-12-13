@@ -1,5 +1,5 @@
 /* Reads a set of text lines and prints the longest one. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define MAXLINE 1000
 

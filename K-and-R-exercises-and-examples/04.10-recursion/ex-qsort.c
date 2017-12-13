@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "stdio.h"
 
 void swap(int v[], int i, int j);
 void qsort(int v[], int left, int right);

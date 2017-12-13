@@ -1,7 +1,7 @@
 /* Our getch and ungetch do not handle a pushed-back EOF correctly. Decide what their
   propertes ought to be if an EOF is pushed back, then implement your design.*/
-#include <stdio.h>
-#include <stdlib.h>  // for atof()
+#include "stdio.h"
+#include "stdlib.h"  // for atof()
 
 #define MAXOP 100    // max size of operand or operator
 #define NUMBER '0'   // signal that a number wes found
@@ -76,7 +76,7 @@ double pop(void)
     }
 }
 
-#include <ctype.h>
+#include "ctype.h"
 
 int getch(void);
 void ungetch(int);

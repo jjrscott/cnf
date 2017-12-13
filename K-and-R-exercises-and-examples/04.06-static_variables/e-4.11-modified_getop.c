@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>  // for atof()
+#include "stdio.h"
+#include "stdlib.h"  // for atof()
 
 #define MAXOP 100    // max size of operand or operator
 #define NUMBER '0'   // signal that a number was found
@@ -74,7 +74,7 @@ double pop(void)
     }
 }
 
-#include <ctype.h>
+#include "ctype.h"
 
 #define BUFFSIZE 100
 

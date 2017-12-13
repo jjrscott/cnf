@@ -1,12 +1,12 @@
 /* ATTENTION!!!
    This should not be compiled with -std=99 */
 
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>	/* flags for read and write */
-#include <sys/types.h>	/* typedefs */
-#include <sys/stat.h>	/* structure returned by stat */
+#include "stdio.h"
+#include "string.h"
+#include "unistd.h"
+#include "fcntl.h"	/* flags for read and write */
+#include "sys/types.h"	/* typedefs */
+#include "sys/stat.h"	/* structure returned by stat */
 #include "dirent.h"
 
 void fsize(char *);

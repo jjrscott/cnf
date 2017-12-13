@@ -1,6 +1,6 @@
 /* Define a macro swap(t,x,y) that interchanges two arguments of type t, 
    (block structure will help). */
-#include <stdio.h>
+#include "stdio.h"
 
 #define swap(t,x,y) {t temp; temp=(x); (x)=(y); (y)=temp;}
 

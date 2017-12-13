@@ -1,7 +1,7 @@
 /* Write a function strrindex(s,t), which returns the position of the rightmost 
    occurence of t in s, or -1 if there is none.*/
-#include <stdio.h>
-#include <string.h>
+#include "stdio.h"
+#include "string.h"
 
 #define MAXLINE 1000   // maximum input line length
 

@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <unistd.h>
+#include "stdio.h"
+#include "unistd.h"
 
 /* copy input to output */
 int main(void)

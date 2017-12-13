@@ -1,6 +1,6 @@
 /* Write a function reverse(s) that reverses the characte string s. 
    Use it to write a program that reverses its input a line at a time. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define MAXLINE 1000
 

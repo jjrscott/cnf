@@ -1,5 +1,5 @@
 /* verifies EOF and prints the value of EOF*/
-#include <stdio.h>
+#include "stdio.h"
 
 int main(void)
 {

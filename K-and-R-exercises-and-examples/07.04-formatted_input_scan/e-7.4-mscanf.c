@@ -1,6 +1,6 @@
 /* Write a private version of scanf analogous to miniprintf from the previous section. */
-#include <stdio.h>
-#include <stdarg.h>
+#include "stdio.h"
+#include "stdarg.h"
 
 /* keep_reading: reads until new line or EOF*/
 void keep_reading(void)

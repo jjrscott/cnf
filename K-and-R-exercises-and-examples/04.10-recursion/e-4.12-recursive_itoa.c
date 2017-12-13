@@ -1,6 +1,6 @@
 /* Adapt the ideas of printd to write a recursive version of itoa; that is,
    convert an integer into a string by calling a recursive routine. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define MAXLEN 100
 

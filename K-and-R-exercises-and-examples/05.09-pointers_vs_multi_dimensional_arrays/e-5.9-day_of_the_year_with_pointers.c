@@ -1,6 +1,6 @@
 /* Rewrite the routines day_of_year and month_day with pointers 
    instead of indexing. */
-#include <stdio.h>
+#include "stdio.h"
 
 int day_of_year(int year, int month, int day);
 void month_day(int year, int yearday, int *pmonth, int *pday);

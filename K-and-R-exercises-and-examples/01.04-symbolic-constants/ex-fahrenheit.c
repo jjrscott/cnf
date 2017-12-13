@@ -1,5 +1,5 @@
 /* Print Fahrenheit-Celsius table; using symbolic constants. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define LOWER 0
 #define UPPER 300

@@ -5,10 +5,10 @@
    the best use of the value of available storage; lines should be sorted
    as in the sorting program of Section 5.6 not in a two-dimensional array of
    fixed size. */
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
+#include "ctype.h"
 
 #define MAXLINES 5000   // max number of lines
 #define PLINES 10

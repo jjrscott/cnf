@@ -1,7 +1,7 @@
 /* Modify the sort prgram to handle a -r flag, which indicates sorting in reverse
    (decreasing) order. Be sure that -r works with -n. */
-#include <stdio.h>
-#include <string.h>
+#include "stdio.h"
+#include "string.h"
 
 #define MAXLINES 5000
 char *lineptr[MAXLINES];
@@ -76,7 +76,7 @@ void qsort2(void *v[], int left, int right, int(*comp)(void *, void *), int reve
   qsort2(v, last + 1, right, comp, reversed);
 }
 
-#include <stdlib.h>
+#include "stdlib.h"
 
 int numcmp(char *s1, char *s2)
 {

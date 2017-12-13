@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include "stdio.h"
+#include "unistd.h"
+#include "fcntl.h"
 
 #define PERMS 666    // RW for owner, group, others
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-#include <stdarg.h>
+#include "stdarg.h"
 /* error print an error message and die */
 void error(char *fmt, ...)
 {

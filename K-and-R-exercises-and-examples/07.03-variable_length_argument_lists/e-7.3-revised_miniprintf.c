@@ -1,6 +1,6 @@
 /* Revise miniprintf to handle more of the other facilities of printf. */
-#include <stdio.h>
-#include <stdarg.h>
+#include "stdio.h"
+#include "stdarg.h"
 
 /* miniprintf: minimal printf with variable argument list */
 void miniprintf(char *fmt, ...)

@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "stdio.h"
 
 /* cat: concatenate files, version 1 */
 int main(int argc, char *argv[])

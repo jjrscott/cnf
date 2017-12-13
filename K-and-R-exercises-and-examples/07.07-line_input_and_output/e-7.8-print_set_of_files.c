@@ -1,6 +1,6 @@
 /* Write a program to print a set of files, starting each new one on a new page,
    with a title and a running page count for each file. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define MAXLINE 1000
 #define PAGEROWS 50

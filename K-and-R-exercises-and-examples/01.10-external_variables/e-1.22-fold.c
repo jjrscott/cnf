@@ -2,7 +2,7 @@
    after the last non-blank character that occurs before the n-th column of input. 
    Make sure your program does somthing intelligent with very long lines, and
    if there are no banks or tabs before the specified column. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define COLUMN 5
 

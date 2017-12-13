@@ -3,9 +3,9 @@
 
 /* Add commands for handling variables. (It's easy to provide twenty six variables
    with single-letter names.) Add a variable for the most recently printed value. */
-#include <stdio.h>
-#include <stdlib.h>  // for atof()
-#include <math.h>    // for fmod()
+#include "stdio.h"
+#include "stdlib.h"  // for atof()
+#include "math.h"    // for fmod()
 
 #define MAXOP 100    // max size of operand or operator
 #define NUMBER '0'   // signal that a number wes found
@@ -100,7 +100,7 @@ int main(void)
 }
 
 #define MAXVAL 100
-#include <string.h>
+#include "string.h"
 
 int sp = 0;
 double val[MAXVAL];
@@ -153,7 +153,7 @@ void clear_stack(void)
   sp = 0;
 }
 
-#include <ctype.h>
+#include "ctype.h"
 
 int getch(void);
 void ungetch(int);

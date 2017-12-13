@@ -1,9 +1,9 @@
 /* Write the function itob(n,s,b) that converts the integer n into a base b character
    represeintation in the string s. In particular, itob(n,s,16) formats n as a hexadecimal
    integer in s.*/
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "stdio.h"
+#include "string.h"
+#include "stdlib.h"
 
 #define MAXLEN 100
 

@@ -1,8 +1,8 @@
 /* Write a routine ungets(s) that will push back an entire string onto the input.
    Should ungets know about buf and bufp or shoild it just use ungetch? */
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
+#include "stdio.h"
+#include "ctype.h"
+#include "string.h"
 
 #define MAXOP 100
 #define NUMBER '0'
@@ -21,7 +21,7 @@ int main(void)
     printf("%c", type);
   return 0;
 }
-#include <ctype.h>
+#include "ctype.h"
 
 int getch(void);
 void ingetch(int);

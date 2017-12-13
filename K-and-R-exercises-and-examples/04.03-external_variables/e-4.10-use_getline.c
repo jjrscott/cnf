@@ -1,7 +1,7 @@
 /* An alternate organization uses get_line to read an entire input line; this makes
    getch and ungetch unnecessary. Revise the caluculator to use this approach. */
-#include <stdio.h>
-#include <stdlib.h>  // for atof()
+#include "stdio.h"
+#include "stdlib.h"  // for atof()
 
 #define MAXOP 100    // max size of operand or operator
 #define NUMBER '0'   // signal that a number was found
@@ -90,7 +90,7 @@ int get_line(char s[], int lim)
   return i;              
 }
  
-#include <ctype.h>
+#include "ctype.h"
 
 int j = 0;
 /* getop: get next operator or numberic operand */

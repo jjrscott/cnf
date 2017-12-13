@@ -1,6 +1,6 @@
 /* Write a program to compare two files, printing the first line where they differ. */
-#include <stdio.h>
-#include <string.h>
+#include "stdio.h"
+#include "string.h"
 
 #define MAXLINE 100
 

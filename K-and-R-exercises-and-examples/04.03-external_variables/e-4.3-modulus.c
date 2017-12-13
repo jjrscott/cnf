@@ -1,8 +1,8 @@
 /* Given the basic framework it's straightforward to exted the calculator.
    Add the modulus (%) operator and provision for negative numbers. */
-#include <stdio.h>
-#include <stdlib.h>  // for atof()
-#include <math.h>    // for fmod()
+#include "stdio.h"
+#include "stdlib.h"  // for atof()
+#include "math.h"    // for fmod()
 
 #define MAXOP 100    // max size of operand or operator
 #define NUMBER '0'   // signal that a number wes found
@@ -84,7 +84,7 @@ double pop(void)
     }
 }
 
-#include <ctype.h>
+#include "ctype.h"
 
 int getch(void);
 void ingetch(int);

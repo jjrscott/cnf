@@ -1,6 +1,6 @@
 /* Write a program to copy its imput to its output, replacing each string
    of one or more blanks by a single blank. */
-#include <stdio.h>
+#include "stdio.h"
 
 int main(void)
 {

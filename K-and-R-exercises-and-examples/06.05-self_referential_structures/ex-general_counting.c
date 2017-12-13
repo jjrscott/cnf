@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
+#include "stdio.h"
+#include "ctype.h"
+#include "string.h"
 
 #define MAXWORD 100
 
@@ -65,7 +65,7 @@ void treeprint(struct tnode *p)
     }
 }
 
-#include <stdlib.h>
+#include "stdlib.h"
 /* talloc: make a tnode */
 struct tnode *talloc(void)
 {

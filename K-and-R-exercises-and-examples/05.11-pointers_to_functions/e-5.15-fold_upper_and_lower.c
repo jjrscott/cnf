@@ -1,8 +1,8 @@
 /* Add the option -f to fold upper and lower case together, so that case distinctions
    are not made during sorting; for example, a and A compare equal. */
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+#include "stdio.h"
+#include "string.h"
+#include "ctype.h"
 
 #define MAXLINES 5000
 
@@ -106,7 +106,7 @@ void lower(char v[])
     }
 }
 
-#include <stdlib.h>
+#include "stdlib.h"
 
 int numcmp(char *s1, char *s2)
 {

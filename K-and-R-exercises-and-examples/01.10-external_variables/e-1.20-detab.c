@@ -1,7 +1,7 @@
 /* Write a program detab that replaces tabs in the input with the proper number
    of blanks to space to the next tab stop. Assume a fixed set of ab stops, say 
    every n columns. */
-#include <stdio.h>
+#include "stdio.h"
 
 #define TABLEN 5
 #define MAXLINE 1000

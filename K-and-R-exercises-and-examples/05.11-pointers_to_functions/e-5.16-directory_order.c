@@ -1,9 +1,9 @@
 /* Add the -d ("directory order") option, which makes comparisons only on letters,
    numbers and blanks. Make sure it works in conjunction with -f .*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+#include "ctype.h"
 
 int get_line(char*, int);
 char *alloc(int);

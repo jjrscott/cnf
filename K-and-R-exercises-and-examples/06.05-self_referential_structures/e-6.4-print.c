@@ -1,10 +1,10 @@
 /* Write a program that prints the distinct words in its input sorted into decreasing
    order of frequency of occurrence. Precede each word by its count. */
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "stdlib.h"
+#include "stdio.h"
+#include "string.h"
 
-#include <assert.h>
+#include "assert.h"
 
 
 typedef struct WORD

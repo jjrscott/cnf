@@ -1,5 +1,5 @@
-#include <stdlib.h>
-#include <string.h>
+#include "stdlib.h"
+#include "string.h"
 typedef long Align;                // for alignment to long boundary
 
 union header                       // block header:
