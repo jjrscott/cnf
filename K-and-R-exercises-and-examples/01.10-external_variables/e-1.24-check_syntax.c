@@ -7,7 +7,7 @@
 #define MAXLINE 1000 /* max input line size */
 char line[MAXLINE];  /*current input line*/
 
-int getline(void);  /* taken from the KnR book. */
+int get_line(void);  /* taken from the KnR book. */
 
 int main(void)
 {
@@ -17,7 +17,7 @@ int main(void)
   int s_quote=1, d_quote=1;
 
 
-  while ((len = getline()) > 0 )
+  while ((len = get_line()) > 0 )
     {
       t=0;
       while(t < len)
@@ -65,8 +65,8 @@ int main(void)
 }
 
 
-/* getline: specialized version */
-int getline(void)
+/* get_line: specialized version */
+int get_line(void)
 {
   int c, i;
   extern char line[];

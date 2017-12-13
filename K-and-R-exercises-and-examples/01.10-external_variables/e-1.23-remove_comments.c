@@ -7,7 +7,7 @@
 #define OUT 1
 
 int state = OUT;     // state of the cursor IN-inside comment OUT-outside comment
-int getline(char line[], int limit);
+int get_line(char line[], int limit);
 int comment_start(char line[], int position);
 int comment_end(char line[], int position);
 
@@ -16,7 +16,7 @@ int main(void)
   int len, i;
   char l[MAXLINE];
 
-  while ((len = getline(l, MAXLINE)) > 0)   // while length of line > 0 read line
+  while ((len = get_line(l, MAXLINE)) > 0)   // while length of line > 0 read line
     {
       i = 0;                    // initialize counter
       while (l[i+1] != '\0')    // if next char is not NULL
@@ -42,7 +42,7 @@ int main(void)
   return 0;
 }                                                                                       
 
-int getline(char l[], int lim)
+int get_line(char l[], int lim)
 {
   int c, i;
 

@@ -7,19 +7,19 @@
 #define MAXLINE 1000
 
 void print_detab(char line[]);
-int getline(char line[], int maxline);
+int get_line(char line[], int maxline);
 
 int main(void)
 {
   int len;
   char line[MAXLINE];
 
-  while ((len = getline(line, MAXLINE)) > 0)
+  while ((len = get_line(line, MAXLINE)) > 0)
     print_detab(line);
   return 0;
 }
 
-int getline(char l[], int lim)
+int get_line(char l[], int lim)
 {
   int c, i;
 

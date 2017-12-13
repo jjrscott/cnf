@@ -4,6 +4,8 @@
 #define MAXLEN 1000   // max length of any input line
 #define MAXSTOR 5000  // max length of storage
 
+int get_line(char line[], int maxline);
+
 /* readlines: read input lines */
 int readlines(char *lineptr[], char *linestor, int maxlines)
 {
@@ -13,7 +15,7 @@ int readlines(char *lineptr[], char *linestor, int maxlines)
   char *linestop = linestor + MAXSTOR;
 
   nlines = 0;
-  while ((len = getline(line, MAXLEN)) > 0)
+  while ((len = get_line(line, MAXLEN)) > 0)
     if (nlines >= maxlines || p + len> linestop)
       return -1;
     else
@@ -23,4 +25,17 @@ int readlines(char *lineptr[], char *linestor, int maxlines)
 	lineptr[nlines++] = p;
       }
   return nlines;
+}
+
+
+int main(void)
+{
+	abort();
+    return 0;
+}
+
+int get_line(char line[], int maxline)
+{
+	abort();
+    return 0;
 }

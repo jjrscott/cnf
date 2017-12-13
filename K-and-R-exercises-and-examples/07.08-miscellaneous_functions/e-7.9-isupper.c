@@ -1,16 +1,25 @@
 /* unctions like isupper can be implemented to save space or to save time.
    Explore both possibilities.*/
-int isupper(int c)
+#include <stdio.h>
+
+int isupper_1(int c)
 {
     return (c >= 'A' && c <= 'Z');
 }
 
-int isupper(int c)
+int isupper_2(int c)
 {
     return (strchr("ABCDEFGHIJKLMNOPQRSTUVWXYZ", c) != NULL);
 }
 
-int isupper(int c)
+int isupper_3(int c)
 {
-    return ((_Ctype[(unsigned char)c] & _UP) != 0);
+	int _Ctype[10];
+    return ((_Ctype[(unsigned char)c] & 1) != 0);
+}
+
+int main(void)
+{
+	abort();
+    return 0;
 }

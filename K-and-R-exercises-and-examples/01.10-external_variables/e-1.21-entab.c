@@ -5,7 +5,7 @@
 #define TABLEN 3
 #define MAXLINE 1000
 
-int getline(char line[], int limit);
+int get_line(char line[], int limit);
 void print_detab(char line[]);
 int tabs_to_insert_in(char lint[], int position);
 
@@ -14,13 +14,13 @@ int main(void)
   int len;
   char line[MAXLINE];
 
-  while ((len = getline(line, MAXLINE)) > 0)
+  while ((len = get_line(line, MAXLINE)) > 0)
     print_detab(line);
     
   return 0;
 }
 
-int getline(char l[], int lim)
+int get_line(char l[], int lim)
 {
   int i;
   char c;

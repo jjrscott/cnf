@@ -31,7 +31,7 @@ int main(void)
 }
 
 struct tnode *talloc(void);
-char *strdup(char *);
+char *strdup(const char *);
 
 /* addtree: add a node with 2, at or below p */
 struct tnode *addtree(struct tnode *p, char *w)
@@ -72,7 +72,7 @@ struct tnode *talloc(void)
   return (struct tnode *) malloc(sizeof(struct tnode));
 }
 
-char *strdup(char *s)    // make a duplicate of s
+char *strdup(const char *s)    // make a duplicate of s
 {
   char *p;
 

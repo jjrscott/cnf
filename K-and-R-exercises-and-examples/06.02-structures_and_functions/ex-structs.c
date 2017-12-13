@@ -35,7 +35,7 @@ int main(void)
   origin = screen.pt1;
   pp = &origin;
   printf("origin is (%d,%d)\n", (*pp).x, (*pp).y);
-  printf("origin is (%d,%d)\n", pp->x, pp->.y)
+  printf("origin is (%d,%d)\n", pp->x, pp->y);
     return 0;
 }
 

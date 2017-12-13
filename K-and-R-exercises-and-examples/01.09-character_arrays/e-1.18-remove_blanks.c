@@ -4,7 +4,7 @@
 
 #define MAXLINE 1000
 
-int getline(char line[], int limit);
+int get_line(char line[], int limit);
 void print_line(char line[], int line_length);
 int is_blank(char line[]);
 
@@ -13,13 +13,13 @@ int main(void)
   int len;
   char line[MAXLINE];
   
-  while ((len = getline(line, MAXLINE)) > 0)
+  while ((len = get_line(line, MAXLINE)) > 0)
     print_line(line, len);
  
   return 0;
 }
 
-int getline(char s[], int lim)
+int get_line(char s[], int lim)
 {
   int c, i;
 

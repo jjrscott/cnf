@@ -359,7 +359,7 @@ int NoiseWord(char *s)
  * Oh well... time to roll our own again...
  */
 
-char *GetLine(char *s, int n, FILE *fp)
+char *get_line(char *s, int n, FILE *fp)
 {
   int c = 0;
   int done = 0;
@@ -388,7 +388,7 @@ char *GetLine(char *s, int n, FILE *fp)
 }
 
 /*
- * Ideally, we'd use a clever GetLine function which expanded its
+ * Ideally, we'd use a clever get_line function which expanded its
  * buffer dynamically to cope with large lines. Since we can't use
  * realloc, and because other solutions would require quite hefty
  * engineering, we'll adopt a simple solution - a big buffer.
@@ -412,7 +412,7 @@ int main(void)
 
   char *delims = " \t\n\r\a\f\v!\"%^&*()_=+{}[]\\|/,.<>:;#~?";
 
-  while(!giveup && GetLine(buffer, sizeof buffer, stdin) != NULL)
+  while(!giveup && get_line(buffer, sizeof buffer, stdin) != NULL)
     {
       ++line;
       s = buffer;

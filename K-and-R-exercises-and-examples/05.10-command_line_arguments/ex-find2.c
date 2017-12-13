@@ -3,7 +3,7 @@
 
 #define MAXLINE 1000
 
-int getline(char *line, int max);
+int get_line(char *line, int max);
 
 /* find: print line that match pattern from 1st arg */
 int main(int argc, char *argv[])
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
   if (argc != 1)
     printf("Usage: find -x -n pattern\n");
   else
-    while (getline(line, MAXLINE) > 0)
+    while (get_line(line, MAXLINE) > 0)
       {
 	lineno++;
 	if ((strstr(line, *argv) != NULL) != except)
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
   return found;
 }
 
-int getline(char *s, int lim)
+int get_line(char *s, int lim)
 {
   int c, i;
 

@@ -15,9 +15,9 @@ typedef union header Header;
 
 static Header base;               // empty list to get started with
 static Header *freep = NULL;       // start of free list
-void *malloc(unsigned nbytes);
+void *malloc(size_t nbytes);
 /* malloc: general-purpose storage allocator */
-void *malloc(unsigned nbytes)
+void *malloc(size_t nbytes)
 {
   Header *p, *prevp;
   Header *morecore(unsigned);
@@ -95,3 +95,10 @@ void free(void *ap)
     p->s.ptr = bp;
   freep = p;
 }
+
+int main(void)
+{
+	abort();
+    return 0;
+}
+

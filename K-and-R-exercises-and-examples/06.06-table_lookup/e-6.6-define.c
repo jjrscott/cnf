@@ -272,7 +272,7 @@ int readword(void)
  ***************************************************************************/
 
 unsigned hash(char *);
-char *strdup(char *);
+char *strdup(const char *);
 
 /* lookup: From K&R2 page 145. Look for s in hashtab. */
 struct nlist *lookup(char *s)
@@ -315,7 +315,7 @@ unsigned hash(char *s)
 }
 
 /* strdup: From K&R2 page 143. Makes a duplicate of s. */
-char *strdup(char *s)
+char *strdup(const char *s)
 {
   char *p;
   p = (char *) malloc(strlen(s) + 1);

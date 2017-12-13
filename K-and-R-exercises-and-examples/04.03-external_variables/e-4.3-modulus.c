@@ -88,6 +88,7 @@ double pop(void)
 
 int getch(void);
 void ingetch(int);
+void ungetch(int c);
 
 /* getop: get next operator or numberic operand */
 int getop(char s[])

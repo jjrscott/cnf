@@ -77,7 +77,7 @@ void swap(void *v[], int i, int j)
 
 
 #define MAXLEN 1000   // max length of any input line
-int getline(char *, int);
+int get_line(char *, int);
 char *alloc(int);
 
 /* readlines: read input lines */
@@ -87,7 +87,7 @@ int readlines(char *lineptr[], int maxlines)
   char *p, line[MAXLEN];
 
   nlines = 0;
-  while ((len = getline(line, MAXLEN)) > 0)
+  while ((len = get_line(line, MAXLEN)) > 0)
     if (nlines >= maxlines || (p = alloc(len)) == NULL)
       return -1;
     else
@@ -99,8 +99,8 @@ int readlines(char *lineptr[], int maxlines)
   return nlines;
 }
 
-/* getline: read a line into s, return length */
-int getline(char *s, int lim)
+/* get_line: read a line into s, return length */
+int get_line(char *s, int lim)
 {
   int c, i;
 

@@ -10,3 +10,9 @@ int bitcount(unsigned x)
         b++;
     return b;
 }
+
+int main(void)
+{
+    return 0;
+}
+

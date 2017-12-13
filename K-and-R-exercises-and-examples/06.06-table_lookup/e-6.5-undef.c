@@ -1,5 +1,8 @@
 /* Write a function undef that will remove a name and definition from the table
    maintained by lookup and install .*/
+
+#include "e-6.6-define.c"
+   
 void undef(char *s)
 {
     struct nlist *np1, *np2;

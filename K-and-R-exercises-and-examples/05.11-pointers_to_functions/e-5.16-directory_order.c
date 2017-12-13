@@ -5,7 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 
-int getline(char*, int);
+int get_line(char*, int);
 char *alloc(int);
 int readlines(char**, int);
 void writelines(char**, int);
@@ -153,7 +153,7 @@ int readlines(char *lineptr[], int maxlines)
   char *p, line[MAXLEN];
   int longline = 0;
 	
-  while((len = getline(line, MAXLEN)) > 0) {
+  while((len = get_line(line, MAXLEN)) > 0) {
     if(nlines >= maxlines || (p = alloc(len)) == NULL)
       return -1;
     else {
@@ -185,7 +185,7 @@ void writelines(char *lineptr[], int nlines)
   return;
 }
 
-int getline(char *s, int max)
+int get_line(char *s, int max)
 {
   int c;
   char *ps = s;

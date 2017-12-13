@@ -5,7 +5,7 @@
 
 #define MAXLINE 1000   // maximum input line length
 
-int getline(char line[], int max);
+int get_line(char line[], int max);
 int strrindex(char source[], char char_to_find);
 
 char ch = 'x';   // pattern to search
@@ -15,14 +15,14 @@ int main(void)
 {
   char line[MAXLINE];
 
-  while (getline(line, MAXLINE) > 0)
+  while (get_line(line, MAXLINE) > 0)
     printf("%d\n", strrindex(line, ch));
     
   return 0;
 }
 
-/* getline: get line into s, return length */
-int getline(char s[], int lim)
+/* get_line: get line into s, return length */
+int get_line(char s[], int lim)
 {
   int c, i;
 

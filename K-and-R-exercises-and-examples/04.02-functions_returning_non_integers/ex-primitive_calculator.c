@@ -7,10 +7,10 @@ int main(void)
 {
   double sum, atof(char s[]);
   char line[MAXLINE];
-  int getline(char line[], int max);
+  int get_line(char line[], int max);
 
   sum = 0;
-  while (getline(line, MAXLINE) > 0)
+  while (get_line(line, MAXLINE) > 0)
     printf("\t%g\n", sum += atof(line));
   return 0;
 }
@@ -39,8 +39,8 @@ double atof(char s[])
 }
 
 
-/* getline: get line into s, return length */
-int getline(char s[], int lim)
+/* get_line: get line into s, return length */
+int get_line(char s[], int lim)
 {
   int c, i;
 

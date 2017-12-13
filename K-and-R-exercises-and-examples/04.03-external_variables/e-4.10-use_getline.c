@@ -1,4 +1,4 @@
-/* An alternate organization uses getline to read an entire input line; this makes
+/* An alternate organization uses get_line to read an entire input line; this makes
    getch and ungetch unnecessary. Revise the caluculator to use this approach. */
 #include <stdio.h>
 #include <stdlib.h>  // for atof()
@@ -7,7 +7,7 @@
 #define NUMBER '0'   // signal that a number was found
 #define MAXLINE 1000 // length of a maximum line to be read
 
-int getline(char [], int);
+int get_line(char [], int);
 void push (double);
 double pop (void);
 int getop(char [], char[]);
@@ -19,7 +19,7 @@ int main(void)
   double op2;
   char s[MAXOP], line[MAXLINE];
   
-  while (getline(line, MAXLINE) > 0) 
+  while (get_line(line, MAXLINE) > 0) 
     while ((type = getop(s, line)) != '\0')
       switch (type)
 	{
@@ -77,7 +77,7 @@ double pop(void)
     }
 }
 
-int getline(char s[], int lim)
+int get_line(char s[], int lim)
 {
   int c, i;
 
