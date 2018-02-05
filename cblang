@@ -10,8 +10,11 @@ use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 use JSON::PP;
 
+my $display = 'src';
+
 GetOptions
 (
+	"display=s" => \$display,
 );
 
 my $keyIndex = 0;
@@ -56,9 +59,18 @@ sub handle_file
 	
 		if ($root)
 		{
-			my $content = encodeTree($root);
-			$content =~ s/^  //gm;
-			print $content;
+			if ($display eq 'tree')
+			{
+				my $content = encodeTree($root);
+				$content =~ s/^  //gm;
+				print $content;
+			}
+			elsif ($display eq 'src')
+			{
+				my $content = encodeC($root);
+				$content =~ s/^  //gm;
+				print $content;
+			}
 # 			print qq(<link rel="stylesheet" type="text/css" href="/Volumes/Personal/Repositories/c-flat/cblang.css">).encodeXML($root);
 			exit;
 		}
