@@ -1,9 +1,7 @@
 /* Print Fahrenheit Celsius table; first version */
 #include "stdio.h"
 
-#define func
-
-func int main(void)
+int main(void)
 {
   int fahr, celsius;
   int lower, upper, step;
