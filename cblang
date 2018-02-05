@@ -401,14 +401,6 @@ sub encodeXML
 	return $content;
 }
 
-sub encodeC
-{
-	my ($node) = @_;
-	my $content = "";
-	encodeContent(\$content, $node);
-	return $content;
-}
-
 sub encodeTree
 {
 	my ($node, @supernodes) = @_;
@@ -433,9 +425,17 @@ sub encodeTree
 	return $content;
 }
 
+sub encodeC
+{
+	my ($node) = @_;
+	my $content = "";
+	encodeContent(\$content, 0, $node);
+	return $content;
+}
+
 sub encodeContent
 {
-	my ($contentRef, $node, @supernodes) = @_;
+	my ($contentRef, $depth, $node, @supernodes) = @_;
 	
 	if ('HASH' ne ref $node)
 	{
@@ -444,39 +444,67 @@ sub encodeContent
 	
 	if (($$contentRef =~ /\n$/ || $$contentRef eq '') && $node->{'token'} ne '{}')
 	{
-		$$contentRef .= "  " x (@supernodes-1);
+		$$contentRef .= "    " x $depth;
 	}
-	elsif ($$contentRef =~ /[,a-z]$/i)
+	elsif ($$contentRef =~ /}$/)
+	{
+		$$contentRef .= "\n";
+		$$contentRef .= "    " x $depth;
+		$depth++;
+	}
+	elsif ($$contentRef !~ /[ \(\{\[]$/)
 	{
 		$$contentRef .= " ";
 	}
 	
 	if ($node->{'token'} eq '()')
-	{
+	{	
+		$$contentRef =~ s/ $//;
 		$$contentRef .= "(";
 	}
 	elsif ($node->{'token'} eq '{}')
 	{
 		$$contentRef .= "\n";
-		$$contentRef .= "  " x (@supernodes-1);
+		$$contentRef .= "    " x $depth;
 		$$contentRef .= "{\n";
+		$depth++;
 	}
 	
 	foreach my $subnode (@{$node->{'subnodes'}})
 	{
-		encodeContent($contentRef, $subnode, $node, @supernodes);
+		encodeContent($contentRef, $depth, $subnode, $node, @supernodes);
 	}
 
 	if ($node->{'token'} eq '()')
 	{
+		$$contentRef =~ s/,$//;
+
 		$$contentRef .= ")";
 	}
 	elsif ($node->{'token'} eq '{}')
 	{
-		$$contentRef .= "}\n";
+		$depth--;
+		if ($$contentRef =~ /\n$/ || $$contentRef eq '')
+		{
+			$$contentRef .= "    " x $depth;
+		}
+
+		$$contentRef .= "}";
+		
+		if (@supernodes && $supernodes[0]{'token'} ne ';')
+		{
+			$$contentRef .= "\n";
+		}
+		
 	}
 	elsif ($node->{'token'} eq ';')
 	{
+		$$contentRef =~ s/,$//;
+		if ($$contentRef =~ /\n$/ || $$contentRef eq '')
+		{
+			$$contentRef .= "    " x $depth;
+		}
+		
 		$$contentRef .= ";\n";
 	}
 	elsif ($node->{'token'} =~ /^\/\*/ || $node->{'token'} =~ /^#/)
