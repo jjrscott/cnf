@@ -9,6 +9,7 @@ use Getopt::Long;
 use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 use JSON::PP;
+use Data::Dumper;
 
 my $display = 'src';
 
@@ -51,11 +52,6 @@ sub handle_file
 		{
 			$root = removeAnonymousTokens($root);	
 		}
-		
-		if ($root)
-		{
-# 			$root = ;	
-		}
 	
 		if ($root)
 		{
@@ -68,7 +64,11 @@ sub handle_file
 			elsif ($display eq 'src')
 			{
 				my $content = encodeC($root);
-				$content =~ s/^  //gm;
+				print $content;
+			}
+			elsif ($display eq 'dump')
+			{
+				my $content = Dumper($root);
 				print $content;
 			}
 # 			print qq(<link rel="stylesheet" type="text/css" href="/Volumes/Personal/Repositories/c-flat/cblang.css">).encodeXML($root);
@@ -220,14 +220,50 @@ sub tokeniseContent
 	return $root;
 }
 
+my $count = 0;
+
 sub removeAnonymousTokens
 {
 	my ($node, @supernodes) = @_;
 	
 	my $cleanNode = mergeNodes($node);
 	
+	if (@{$cleanNode->{'subnodes'}} > 1)
+	{
+		for (my $index=0;$index<@{$cleanNode->{'subnodes'}};$index++)
+		{
+			if ($cleanNode->{'subnodes'}[$index]{'token'} =~ /^[\+\-\/\*\&\|^%]?=$/)
+			{
+				my $subnode = splice @{$cleanNode->{'subnodes'}}, $index, 1;
+				$subnode->{'subnodes'} = [
+					{'token' => '()', 'subnodes' => [splice @{$cleanNode->{'subnodes'}}, 0, $index]},
+					{'token' => '()', 'subnodes' => [@{$cleanNode->{'subnodes'}}]}
+				];
+				$cleanNode->{'subnodes'} = [$subnode];
+				last;
+			}
+		}
+	}
+	
+	if (@{$cleanNode->{'subnodes'}} > 1)
+	{
+		for (my $index=0;$index<@{$cleanNode->{'subnodes'}};$index++)
+		{
+			if ($cleanNode->{'subnodes'}[$index]{'token'} =~ /^(\+)|(\-)|(==)|(>=)|(<=)|(<)|(>)|(!=)|(&&)|(&)|(\|)|(\|\|)|(\?)|(:)$/)
+			{
+				my $subnode = splice @{$cleanNode->{'subnodes'}}, $index, 1;
+				$subnode->{'subnodes'} = [
+					{'token' => '()', 'subnodes' => [splice @{$cleanNode->{'subnodes'}}, 0, $index]},
+					{'token' => '()', 'subnodes' => [@{$cleanNode->{'subnodes'}}]}
+				];
+				$cleanNode->{'subnodes'} = [$subnode];
+			}
+		}
+	}
+
+
 	my @subnodes;
-	foreach my $subnode (@{$node->{'subnodes'}})
+	foreach my $subnode (@{$cleanNode->{'subnodes'}})
 	{
 		push @subnodes, removeAnonymousTokens($subnode, $node, @supernodes);
 	}
@@ -240,10 +276,9 @@ sub removeAnonymousTokens
 		}
 	}
 	
-	
 	if (defined $node->{'token'} || !@supernodes)
 	{
-		$cleanNode->{'subnodes'} = \@subnodes;
+		$cleanNode->{'subnodes'} = [@subnodes];
 		return $cleanNode;
 	}
 	else
