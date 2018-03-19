@@ -4,12 +4,18 @@
 # $ cd <the project directory>
 # $ build_scheme
 
+use utf8;
 use strict;
 use Getopt::Long;
 use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 use JSON::PP;
 use Data::Dumper;
+use FindBin;                 # locate this script
+use lib $FindBin::Bin.'/lib';  # use the parent directory
+use FileUtils;
+use TerminalColors;
+use Dumper;
 
 my $display = 'src';
 
@@ -50,11 +56,6 @@ sub handle_file
 	
 		if ($root)
 		{
-			$root = removeAnonymousTokens($root);	
-		}
-	
-		if ($root)
-		{
 			if ($display eq 'tree')
 			{
 				my $content = encodeTree($root);
@@ -85,8 +86,8 @@ sub tokeniseContent
 	
 	my $operatorSet = quotemeta('!%&*+,-./:;<=>?@\\~^|');
 
-	my @tokens = grep {length} $content =~ m!(\/\*.*?\*/)|(\/\/[^\n]*)|("(?:\\.|[^"])*")|('(?:\\.|[^'])*')|(#[^\n]*)|([A-Za-z][_0-9A-Za-z]+)|(\d+(?:\.\d+)?)|( +)|(\n)|([${operatorSet}]+)|(.)!gs;
-
+	my @tokens = grep {length} $content =~ m!(\/\*.*?\*/)|(\/\/[^\n]*)|("(?:\\.|[^"])*")|('(?:\\.|[^'])*')|(#[^\n]*)|(else +if)|([A-Za-z][_0-9A-Za-z]+)|(\d+(?:\.\d+)?)|( +)|(\n)|([${operatorSet}]+)|(.)!gs;
+	
 	my $root = {'subnodes'=>[]};
 	my @stack = ($root);
 	
@@ -94,118 +95,44 @@ sub tokeniseContent
 	my $column = 1;
 	my $offset = 0;
 	
-	{
-		my $subnodes = [];
-		my $node = {'token'=>';', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-		push @{$stack[-1]{'subnodes'}}, $node;
-		push @stack, $node;
-	}
-	
-	{
-		my $subnodes = [];
-		my $node = {'token'=>',', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-		push @{$stack[-1]{'subnodes'}}, $node;
-		push @stack, $node;
-	}	
-	
 	foreach my $token (@tokens)
 	{
+		my $isMatched = 0;
 		if ($token =~ /^[{\(\[]$/)
 		{
-			{
-				my $subnodes = [];
-				my $node = {'token'=>$token, 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}
-			
-			{
-				my $subnodes = [];
-				my $node = {'token'=>';', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}
-			
-			{
-				my $subnodes = [];
-				my $node = {'token'=>',', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}	
-		}
-		elsif ($token =~ /^[}\)\]]$/)
-		{
-			# leave the nodes last ,
-			pop @stack;
-			
-			# leave the nodes last ;
-			pop @stack;
-			
-		
-			$stack[-1]{'token'} .= $token;
-			pop @stack; # nodes			
-		}
-		elsif ($token =~ /^;$/)
-		{
-			# leave the nodes last ,
-			pop @stack;
-		
-			# leave the nodes last item
-			pop @stack;
-			
-			{
-				my $subnodes = [];
-				my $node = {'token'=>';', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}	
-			{
-				my $subnodes = [];
-				my $node = {'token'=>',', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}	
-		}
-		elsif ($token =~ /^(\/\*)|(\/\/)|(#)/)
-		{
-			push @{$stack[-1]{'subnodes'}}, {'token'=>$token, 'row' => $row, 'column' => $column, 'offset' => $offset, 'subnodes'=>[]};
-
-			# leave the nodes last ,
-			pop @stack;
-		
-			# leave the nodes last item
-			pop @stack;
-			
-			{
-				my $subnodes = [];
-				my $node = {'token'=>';', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}	
-			{
-				my $subnodes = [];
-				my $node = {'token'=>',', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}	
+			$isMatched = 1;
+			my $subnodes = [];
+			my $node = {'subnodes'=>$subnodes, comment => $token};
+			push @{$stack[-1]{'subnodes'}}, $node;
+			push @stack, $node;
 		}
 
-		elsif ($token =~ /^,$/)
+		if ($token =~ /^[}\)\]]$/)
 		{
-			# leave the nodes last item
+			$isMatched = 1;
+			$stack[-1]{'comment'} .= ' … '.$token;
 			pop @stack;
-			
-			{
-				my $subnodes = [];
-				my $node = {'token'=>',', 'subnodes'=>$subnodes, 'row' => $row, 'column' => $column, 'offset' => $offset};
-				push @{$stack[-1]{'subnodes'}}, $node;
-				push @stack, $node;
-			}	
 		}
-		elsif ($token !~ /^[ \t\n]+$/)
+
+		if ($token !~ /^[ \t\n]+$/)
 		{
-			push @{$stack[-1]{'subnodes'}}, {'token'=>$token, 'row' => $row, 'column' => $column, 'offset' => $offset, 'subnodes'=>[]};
+			push @{$stack[-1]{'subnodes'}}, {'token'=>$token, 'row' => $row, 'column' => $column, 'offset' => $offset, 'subnodes'=>[], isMatched => $isMatched};
 		}
+		
+		if ($token =~ /^[{\(\[]$/)
+		{
+			my $subnodes = [];
+			my $node = {'subnodes'=>$subnodes, comment => $token};
+			push @{$stack[-1]{'subnodes'}}, $node;
+			push @stack, $node;
+		}
+		
+		if ($token =~ /^[}\)\]]$/)
+		{
+			$stack[-1]{'comment'} .= $token;
+			pop @stack;
+		}
+
 		
 		if ($token =~ /\n/)
 		{
@@ -217,235 +144,84 @@ sub tokeniseContent
 		$offset += length $token;
 	}
 	
+	$root = splitSubnodesOnRegex($root, qr/^#/);
+	$root = splitSubnodesOnRegex($root, qr/^\/\*/);
+	$root = splitSubnodesOnRegex($root, qr/^\/\//);
+	
+	# https://cs.wmich.edu/~gupta/teaching/cs4850/sumII06/The%20syntax%20of%20C%20in%20Backus-Naur%20form.htm
+	# http://en.cppreference.com/w/c/language/operator_precedence
+	
+	$root = splitSubnodesOnRegex($root, qr/^if$/);
+	$root = splitSubnodesOnRegex($root, qr/^else +if$/);
+	$root = splitSubnodesOnRegex($root, qr/^else$/);
+	
+	my @tokens = reverse qw
+	(
+		++ -- . ->
+		! ~
+		* / %
+		+ -
+		<< >>
+		< <=
+		> >=
+		== !=
+		&
+		^
+		|
+		&&
+		||
+		: ?
+		= += -= *= /* %= <<= >>= &= ^= |=
+		,
+		return while do for
+		;
+	);
+	
+	foreach my $token (map {quotemeta} @tokens)
+	{
+		$root = splitSubnodesOnRegex($root, qr/^${token}$/);
+	}
+	
+# 	$root = splitSubnodesOnRegex($root, qr/^[\$_a-z0-9]+$/);
+
 	return $root;
 }
 
-my $count = 0;
-
-sub removeAnonymousTokens
+sub splitSubnodesOnRegex
 {
-	my ($node, @supernodes) = @_;
+	my ($node, $regex) = @_;
 	
-	my $cleanNode = mergeNodes($node);
+# 	my $cleanNode = {%{$node}, 'subnodes'=>[]};
+# 	
+# 	$cleanNode->{'subnodes'} = [];
 	
-	if (@{$cleanNode->{'subnodes'}} > 1)
+	my @subnodes = @{$node->{'subnodes'}};
+	
+	for (my $index=0;$index<@subnodes;$index++)
 	{
-		for (my $index=0;$index<@{$cleanNode->{'subnodes'}};$index++)
+		if ($subnodes[$index]{'token'} =~ $regex)
 		{
-			if ($cleanNode->{'subnodes'}[$index]{'token'} =~ /^[\+\-\/\*\&\|^%]?=$/)
-			{
-				my $subnode = splice @{$cleanNode->{'subnodes'}}, $index, 1;
-				$subnode->{'subnodes'} = [
-					{'token' => '()', 'subnodes' => [splice @{$cleanNode->{'subnodes'}}, 0, $index]},
-					{'token' => '()', 'subnodes' => [@{$cleanNode->{'subnodes'}}]}
-				];
-				$cleanNode->{'subnodes'} = [$subnode];
-				last;
-			}
-		}
-	}
-	
-	if (@{$cleanNode->{'subnodes'}} > 1)
-	{
-		for (my $index=0;$index<@{$cleanNode->{'subnodes'}};$index++)
-		{
-			if ($cleanNode->{'subnodes'}[$index]{'token'} =~ /^(\+)|(\-)|(==)|(>=)|(<=)|(<)|(>)|(!=)|(&&)|(&)|(\|)|(\|\|)|(\?)|(:)$/)
-			{
-				my $subnode = splice @{$cleanNode->{'subnodes'}}, $index, 1;
-				$subnode->{'subnodes'} = [
-					{'token' => '()', 'subnodes' => [splice @{$cleanNode->{'subnodes'}}, 0, $index]},
-					{'token' => '()', 'subnodes' => [@{$cleanNode->{'subnodes'}}]}
-				];
-				$cleanNode->{'subnodes'} = [$subnode];
-			}
+			my @splitSubnodes;
+			
+			$subnodes[$index]{'isMatched'} = 1;
+			my $match = $&; 
+			push @splitSubnodes, {'subnodes'=>[splice @subnodes, 0, $index], 'comment'=> '… '.$match} if $index > 0;
+			push @splitSubnodes, splice @subnodes, 0, 1;
+			push @splitSubnodes, {'subnodes'=>[@subnodes], 'comment'=> $match.' …'} if @subnodes;
+			@subnodes = @splitSubnodes;
+			last;
 		}
 	}
 
-
-	my @subnodes;
-	foreach my $subnode (@{$cleanNode->{'subnodes'}})
-	{
-		push @subnodes, removeAnonymousTokens($subnode, $node, @supernodes);
-	}
-	
-	if ($node->{'token'} =~ /^[;,]$/)
-	{
-		if (@supernodes && (@{$supernodes[0]{'subnodes'}} == 1 || !@subnodes))
-		{
-			return @subnodes;
-		}
-	}
-	
-	if (defined $node->{'token'} || !@supernodes)
-	{
-		$cleanNode->{'subnodes'} = [@subnodes];
-		return $cleanNode;
-	}
-	else
-	{
-		return @subnodes;
-	}
-}
-
-sub mergeNodes
-{
-	my ($node, @nodes) = @_;
-		
-	my $mergedNode = {'subnodes'=>[], 'row' => $node->{'row'}, 'column' => $node->{'column'}, 'offset' => $node->{'offset'}};
-	
-	foreach my $node ($node, @nodes)
-	{
-		$mergedNode->{'token'} .= $node->{'token'} if length $node->{'token'};
-		push @{$mergedNode->{'subnodes'}}, @{$node->{'subnodes'}} if $node->{'subnodes'};
-	
-	}
-	return $mergedNode;
-}
-
-sub cleanExport
-{
-	my ($node, @supernodes) = @_;
-	
-	my @subnodes;
-	foreach my $subnode (@{$node->{'subnodes'}})
-	{
-		push @subnodes, cleanExport($subnode, $node, @supernodes);
-	}
 	
 	if (@subnodes)
 	{
-		if (defined $node->{'token'})
-		{
-			return {'token' => $node->{'token'}, 'subnodes' => \@subnodes};
-		}
-		else
-		{
-			return @subnodes;
-		}
-	}
-	elsif (defined $node->{'token'})
-	{
-		return $node->{'token'};
+		return {%{$node}, 'subnodes'=>[map {splitSubnodesOnRegex($_, $regex)} @subnodes]}
 	}
 	else
 	{
-		return;
+		return $node;
 	}
-}
-
-use DirHandle;
-
-sub search
-{
-	my ($block, @path) = @_;
-	my $path = join '/', @path;
-	if ($block->(@path) && -d $path)
-	{
-		my $handle = DirHandle->new($path) || return;
-		my @files = $handle->read();
-		$handle->close();
-		foreach my $file (@files)
-		{
-			next if $file =~ /^\.{1,2}$/;
-			search($block, @path, $file);
-		}
-	}
-}
-
-sub read_file
-{
-	my ($encoding, $path) = @_;
-	open(my($file), '<:encoding('.$encoding.')', $path) || die "read_file $!: $path\n";
-	my $content = "";
-	while(<$file>) {
-		$content .= $_;
-	}
-	close $file;
-	return $content;
-}
-
-sub write_file
-{
-	my ($encoding, $path, $content) = @_;
-	if (defined $content)
-	{
-		my $parent = $path;
-		$parent =~ s!/[^/]+$!!;
-		if (!-e $parent)
-		{
-			system "mkdir", "-p", $parent;
-		}
-		if (!-e $path || read_file($encoding, $path) ne $content)
-		{
-			open(my($file), '>:encoding('.$encoding.')', $path) || die "write_file $!: $path\n";
-			print $file $content;
-			close $file;
-		}
-	}
-	elsif (-e $path)
-	{
-		system "rm", "-f", $path;
-	}
-}
-
-BEGIN
-{
-	my $json = JSON::PP->new->canonical(1)->pretty(1)->relaxed(1)->allow_nonref();
-
-	sub Dumper
-	{
-		if (@_ > 1)
-		{
-			return $json->encode(\@_);
-		}
-		else
-		{
-			return $json->encode($_[0]);
-		}
-	}
-}
-
-sub encodeXML
-{
-	my ($node, @supernodes) = @_;
-	
-	my $content = "";
-	my $token = $node->{'token'};
-	if ($node->{'token'} eq '#import')
-	{
-		$content .= "<div class='import'>";
-		$content .= "<pre>";		
-		$content .= $token;
-		$content .= "</pre>";
-	}
-	elsif ($node->{'token'} eq '#include')
-	{
-		$content .= "<div class='include'>";
-		$content .= "<pre>";		
-		$content .= $token;
-		$content .= "</pre>";
-	}
-	else
-	{
-		$content .= "<div>";
-		if (length $node->{'token'})
-		{
-			$token =~ s/&/&#38;/g;
-			$token =~ s/</&#60;/g;
-			$token =~ s/>/&#62;/g;
-			$content .= "<pre>";		
-			$content .= $token;
-			$content .= "</pre>";
-		}
-	}
-	
-	
-	foreach my $subnode (@{$node->{'subnodes'}})
-	{
-		$content .= encodeXML($subnode, $node, @supernodes);
-	}
-	$content .= "</div>";
-	return $content;
 }
 
 sub encodeTree
@@ -454,16 +230,36 @@ sub encodeTree
 	my $content = "";
 	if (exists $node->{'token'})
 	{
+		if ($node->{'isMatched'})
+		{
+			$content .= push_rgb_color(3,0,0);
+		}
 		$content .= $node->{'token'};
-		$content .= "\n";
+		if ($node->{'isMatched'})
+		{
+			$content .= pop_color();
+		}
 	}
+	else
+	{
+		$content .= push_gray_color(0.6);
+		$content .= '«»';
+		$content .= pop_color();
+	}
+	if (defined $node->{'comment'})
+	{
+		$content .= push_color(28);
+		$content .= '  '.$node->{'comment'};
+		$content .= pop_color();
+	}
+	$content .= "\n";
 	
 	foreach my $subnode (@{$node->{'subnodes'}})
 	{
 		$content .= encodeTree($subnode, $node, @supernodes);
 	}
 	
-	if (exists $node->{'token'})
+# 	if (exists $node->{'token'})
 	{
 		$content =~ s/\n/\n  /g;
 		$content =~ s/ +$//;

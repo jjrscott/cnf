@@ -19,7 +19,7 @@ sub rgb_color
 sub gray_color
 {
 	my ($gray) = @_;
-	return $grays[$gray];
+	return $grays[$gray*(@grays-1)];
 }
 
 sub push_color
