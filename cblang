@@ -56,6 +56,45 @@ sub handle_file
 	
 		if ($root)
 		{
+# 		! ~
+# 		* / %
+# 		+ -
+# 		<< >>
+# 		< <=
+# 		> >=
+# 		== !=
+# 		&
+# 		^
+# 		|
+# 		&&
+# 		||
+# 		: ?
+# 		= += -= *= /* %= <<= >>= &= ^= |=
+# 		,
+# 		return while do for
+# 		;
+
+			$root = splitSubnodesOnRegex($root, '^#', qr/^#/);
+			$root = splitSubnodesOnTokens($root, qw(;));
+			$root = splitSubnodesOnTokens($root, 'else if', qw(if else return while do for));
+			$root = splitSubnodesOnTokens($root, qw(,));
+			$root = splitSubnodesOnTokens($root, qw(= += -= *= /* %= <<= >>= &= ^= |=));
+			$root = splitSubnodesOnTokens($root, qw(: ?));
+			$root = splitSubnodesOnTokens($root, qw(||));
+			$root = splitSubnodesOnTokens($root, qw(&&));
+			$root = splitSubnodesOnTokens($root, qw(|));
+			$root = splitSubnodesOnTokens($root, qw(^));
+			$root = splitSubnodesOnTokens($root, qw(&));
+			$root = splitSubnodesOnTokens($root, qw(== !=));
+			$root = splitSubnodesOnTokens($root, qw(> >=));
+			$root = splitSubnodesOnTokens($root, qw(< <=));
+			$root = splitSubnodesOnTokens($root, qw(<< >>));
+			$root = splitSubnodesOnTokens($root, qw(+ -));
+			$root = splitSubnodesOnTokens($root, qw(* / %));
+			$root = splitSubnodesOnTokens($root, qw(! ~));
+			$root = splitSubnodesOnRegex($root, '^/* ^//', qr/^(\/\*)|(\/\/)/);
+		
+		
 			if ($display eq 'tree')
 			{
 				my $content = encodeTree($root);
@@ -72,8 +111,7 @@ sub handle_file
 				my $content = Dumper($root);
 				print $content;
 			}
-# 			print qq(<link rel="stylesheet" type="text/css" href="/Volumes/Personal/Repositories/c-flat/cblang.css">).encodeXML($root);
-			exit;
+# 			exit;
 		}
 	}
 	
@@ -84,9 +122,9 @@ sub tokeniseContent
 {
 	my ($content) = @_;
 	
-	my $operatorSet = quotemeta('!%&*+,-./:;<=>?@\\~^|');
+	my $operatorSet = quotemeta('!%&*+,-./:;<=>?\\~^|');
 
-	my @tokens = grep {length} $content =~ m!(\/\*.*?\*/)|(\/\/[^\n]*)|("(?:\\.|[^"])*")|('(?:\\.|[^'])*')|(#[^\n]*)|(else +if)|([A-Za-z][_0-9A-Za-z]+)|(\d+(?:\.\d+)?)|( +)|(\n)|([${operatorSet}]+)|(.)!gs;
+	my @tokens = grep {length} $content =~ m!(\/\*.*?\*/)|(\/\/[^\n]*)|("(?:\\.|[^"])*")|('(?:\\.|[^'])*')|(#[^\n]*)|(else +if)|(@?[\$A-Za-z][_\$0-9A-Za-z]+)|(\d+(?:\.\d+)?)|( +)|(\n)|([${operatorSet}]+)|(.)!gs;
 	
 	my $root = {'subnodes'=>[]};
 	my @stack = ($root);
@@ -116,7 +154,9 @@ sub tokeniseContent
 
 		if ($token !~ /^[ \t\n]+$/)
 		{
-			push @{$stack[-1]{'subnodes'}}, {'token'=>$token, 'row' => $row, 'column' => $column, 'offset' => $offset, 'subnodes'=>[], isMatched => $isMatched};
+			my $node = {'token'=>$token, 'row' => $row, 'column' => $column, 'offset' => $offset, 'subnodes'=>[], isMatched => $isMatched};
+			$node->{'token'} =~ s~ +~ ~g;
+			push @{$stack[-1]{'subnodes'}}, $node;
 		}
 		
 		if ($token =~ /^[{\(\[]$/)
@@ -143,85 +183,166 @@ sub tokeniseContent
 
 		$offset += length $token;
 	}
-	
-	$root = splitSubnodesOnRegex($root, qr/^#/);
-	$root = splitSubnodesOnRegex($root, qr/^\/\*/);
-	$root = splitSubnodesOnRegex($root, qr/^\/\//);
-	
-	# https://cs.wmich.edu/~gupta/teaching/cs4850/sumII06/The%20syntax%20of%20C%20in%20Backus-Naur%20form.htm
-	# http://en.cppreference.com/w/c/language/operator_precedence
-	
-	$root = splitSubnodesOnRegex($root, qr/^if$/);
-	$root = splitSubnodesOnRegex($root, qr/^else +if$/);
-	$root = splitSubnodesOnRegex($root, qr/^else$/);
-	
-	my @tokens = reverse qw
-	(
-		++ -- . ->
-		! ~
-		* / %
-		+ -
-		<< >>
-		< <=
-		> >=
-		== !=
-		&
-		^
-		|
-		&&
-		||
-		: ?
-		= += -= *= /* %= <<= >>= &= ^= |=
-		,
-		return while do for
-		;
-	);
-	
-	foreach my $token (map {quotemeta} @tokens)
-	{
-		$root = splitSubnodesOnRegex($root, qr/^${token}$/);
-	}
-	
-# 	$root = splitSubnodesOnRegex($root, qr/^[\$_a-z0-9]+$/);
 
+
+	
 	return $root;
+	
+}
+
+# sub handleBrackets
+# {
+# 	my $root;
+# 	my @tokens;
+# 	
+# 		my @stack = ($root);
+# 
+# 	
+# 	foreach my $token (@tokens)
+# 	{
+# 		my $isMatched = 0;
+# 		if ($token =~ /^[{\(\[]$/)
+# 		{
+# 			$isMatched = 1;
+# 			my $subnodes = [];
+# 			my $node = {'subnodes'=>$subnodes, comment => $token};
+# 			push @{$stack[-1]{'subnodes'}}, $node;
+# 			push @stack, $node;
+# 		}
+# 
+# 		if ($token =~ /^[}\)\]]$/)
+# 		{
+# 			$isMatched = 1;
+# 			$stack[-1]{'comment'} .= ' … '.$token;
+# 			pop @stack;
+# 		}
+# 
+# 		if ($token !~ /^[ \t\n]+$/)
+# 		{
+# 			push @{$stack[-1]{'subnodes'}}, {'token'=>$token, 'row' => $row, 'column' => $column, 'offset' => $offset, 'subnodes'=>[], isMatched => $isMatched};
+# 		}
+# 		
+# 		if ($token =~ /^[{\(\[]$/)
+# 		{
+# 			my $subnodes = [];
+# 			my $node = {'subnodes'=>$subnodes, comment => $token};
+# 			push @{$stack[-1]{'subnodes'}}, $node;
+# 			push @stack, $node;
+# 		}
+# 		
+# 		if ($token =~ /^[}\)\]]$/)
+# 		{
+# 			$stack[-1]{'comment'} .= $token;
+# 			pop @stack;
+# 		}
+# 
+# 		
+# 		if ($token =~ /\n/)
+# 		{
+# 			$row += () = $token =~ /\n/g;
+# 			$column = 0;
+# 		}
+# 		$column += length $token =~ /([^\n]+)$/;
+# 
+# 		$offset += length $token;
+# 	}
+# 	
+# # 	$root = splitSubnodesOnRegex($root, qr/^#/);
+# # 	$root = splitSubnodesOnRegex($root, qr/^\/\*/);
+# # 	$root = splitSubnodesOnRegex($root, qr/^\/\//);
+# # 	
+# # 	# https://cs.wmich.edu/~gupta/teaching/cs4850/sumII06/The%20syntax%20of%20C%20in%20Backus-Naur%20form.htm
+# # 	# http://en.cppreference.com/w/c/language/operator_precedence
+# # 	
+# # 	$root = splitSubnodesOnRegex($root, qr/^if$/);
+# # 	$root = splitSubnodesOnRegex($root, qr/^else +if$/);
+# # 	$root = splitSubnodesOnRegex($root, qr/^else$/);
+# # 	
+# # 	my @tokens = reverse qw
+# # 	(
+# # 		++ -- . ->
+# # 		! ~
+# # 		* / %
+# # 		+ -
+# # 		<< >>
+# # 		< <=
+# # 		> >=
+# # 		== !=
+# # 		&
+# # 		^
+# # 		|
+# # 		&&
+# # 		||
+# # 		: ?
+# # 		= += -= *= /* %= <<= >>= &= ^= |=
+# # 		,
+# # 		return while do for
+# # 		;
+# # 	);
+# # 	
+# # 	foreach my $token (map {quotemeta} @tokens)
+# # 	{
+# # 		$root = splitSubnodesOnRegex($root, qr/^${token}$/);
+# # 	}
+# 	
+# # 	$root = splitSubnodesOnRegex($root, qr/^[\$_a-z0-9]+$/);
+# 
+# 	return $root;
+# }
+# 
+
+sub splitSubnodesOnTokens
+{
+	my ($node, @tokens) = @_;
+	my $tokens = join '|', map {quotemeta} @tokens;
+	my $comment = join ' ', map {s~ +~-~g;$_} @tokens;
+	return splitSubnodesOnRegex($node, $comment, qr/^(${tokens})$/);
 }
 
 sub splitSubnodesOnRegex
 {
-	my ($node, $regex) = @_;
+	my ($node, $comment, $regex) = @_;
 	
-# 	my $cleanNode = {%{$node}, 'subnodes'=>[]};
-# 	
-# 	$cleanNode->{'subnodes'} = [];
+	my $didMatch = 0;
+	my $wrappedComment = $comment;
 	
-	my @subnodes = @{$node->{'subnodes'}};
-	
-	for (my $index=0;$index<@subnodes;$index++)
+	foreach my $subnode (@{$node->{'subnodes'}})
 	{
-		if ($subnodes[$index]{'token'} =~ $regex)
+		if ($subnode->{'token'} =~ $regex)
 		{
-			my @splitSubnodes;
-			
-			$subnodes[$index]{'isMatched'} = 1;
-			my $match = $&; 
-			push @splitSubnodes, {'subnodes'=>[splice @subnodes, 0, $index], 'comment'=> '… '.$match} if $index > 0;
-			push @splitSubnodes, splice @subnodes, 0, 1;
-			push @splitSubnodes, {'subnodes'=>[@subnodes], 'comment'=> $match.' …'} if @subnodes;
-			@subnodes = @splitSubnodes;
+			$wrappedComment = sprintf '%s … (%s)', $subnode->{'token'}, $comment;
+			$didMatch = 1;
 			last;
 		}
 	}
-
 	
-	if (@subnodes)
+	my @subnodes;
+	
+	if ($didMatch)
 	{
-		return {%{$node}, 'subnodes'=>[map {splitSubnodesOnRegex($_, $regex)} @subnodes]}
+		foreach my $subnode (@{$node->{'subnodes'}})
+		{
+			if ($subnode->{'token'} =~ $regex)
+			{
+				$subnode->{'isMatched'} = 1;
+				push @subnodes, $subnode;
+			}
+			else
+			{
+				if (!@subnodes || defined $subnodes[-1]{'token'})
+				{
+					push @subnodes, {comment => $wrappedComment, subnodes=>[]};
+				}
+				push @{$subnodes[-1]{'subnodes'}}, $subnode;	
+			}
+		}
 	}
 	else
 	{
-		return $node;
+		@subnodes = @{$node->{'subnodes'}};
 	}
+	
+	return {%{$node}, 'subnodes'=>[map {splitSubnodesOnRegex($_, $comment, $regex)} @subnodes]};
 }
 
 sub encodeTree
@@ -249,7 +370,7 @@ sub encodeTree
 	if (defined $node->{'comment'})
 	{
 		$content .= push_color(28);
-		$content .= '  '.$node->{'comment'};
+		$content .= ' '.$node->{'comment'};
 		$content .= pop_color();
 	}
 	$content .= "\n";
