@@ -1,6 +1,8 @@
 K & R Exercises and Examples
 ============================
 
+*Note* The original of these files is https://github.com/caisah/K-and-R-exercises-and-examples.
+
 My takes of **K&amp;R The C Programming Language 2nd edition** book.
 It includes both the code **examples** and the **answers** for all the exercises.
 

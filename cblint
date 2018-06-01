@@ -1,8 +1,7 @@
 #!/usr/bin/perl -CS
 
-# This script builds an archive release of a project. It should be run thus:
-# $ cd <the project directory>
-# $ build_scheme
+# This script tests that the given files compile using clang and is valid c♭.
+# $ cblint <file(s) to test>
 
 use utf8;
 use strict;
@@ -189,107 +188,6 @@ sub tokeniseContent
 	return $root;
 	
 }
-
-# sub handleBrackets
-# {
-# 	my $root;
-# 	my @tokens;
-# 	
-# 		my @stack = ($root);
-# 
-# 	
-# 	foreach my $token (@tokens)
-# 	{
-# 		my $isMatched = 0;
-# 		if ($token =~ /^[{\(\[]$/)
-# 		{
-# 			$isMatched = 1;
-# 			my $subnodes = [];
-# 			my $node = {'subnodes'=>$subnodes, comment => $token};
-# 			push @{$stack[-1]{'subnodes'}}, $node;
-# 			push @stack, $node;
-# 		}
-# 
-# 		if ($token =~ /^[}\)\]]$/)
-# 		{
-# 			$isMatched = 1;
-# 			$stack[-1]{'comment'} .= ' … '.$token;
-# 			pop @stack;
-# 		}
-# 
-# 		if ($token !~ /^[ \t\n]+$/)
-# 		{
-# 			push @{$stack[-1]{'subnodes'}}, {'token'=>$token, 'row' => $row, 'column' => $column, 'offset' => $offset, 'subnodes'=>[], isMatched => $isMatched};
-# 		}
-# 		
-# 		if ($token =~ /^[{\(\[]$/)
-# 		{
-# 			my $subnodes = [];
-# 			my $node = {'subnodes'=>$subnodes, comment => $token};
-# 			push @{$stack[-1]{'subnodes'}}, $node;
-# 			push @stack, $node;
-# 		}
-# 		
-# 		if ($token =~ /^[}\)\]]$/)
-# 		{
-# 			$stack[-1]{'comment'} .= $token;
-# 			pop @stack;
-# 		}
-# 
-# 		
-# 		if ($token =~ /\n/)
-# 		{
-# 			$row += () = $token =~ /\n/g;
-# 			$column = 0;
-# 		}
-# 		$column += length $token =~ /([^\n]+)$/;
-# 
-# 		$offset += length $token;
-# 	}
-# 	
-# # 	$root = splitSubnodesOnRegex($root, qr/^#/);
-# # 	$root = splitSubnodesOnRegex($root, qr/^\/\*/);
-# # 	$root = splitSubnodesOnRegex($root, qr/^\/\//);
-# # 	
-# # 	# https://cs.wmich.edu/~gupta/teaching/cs4850/sumII06/The%20syntax%20of%20C%20in%20Backus-Naur%20form.htm
-# # 	# http://en.cppreference.com/w/c/language/operator_precedence
-# # 	
-# # 	$root = splitSubnodesOnRegex($root, qr/^if$/);
-# # 	$root = splitSubnodesOnRegex($root, qr/^else +if$/);
-# # 	$root = splitSubnodesOnRegex($root, qr/^else$/);
-# # 	
-# # 	my @tokens = reverse qw
-# # 	(
-# # 		++ -- . ->
-# # 		! ~
-# # 		* / %
-# # 		+ -
-# # 		<< >>
-# # 		< <=
-# # 		> >=
-# # 		== !=
-# # 		&
-# # 		^
-# # 		|
-# # 		&&
-# # 		||
-# # 		: ?
-# # 		= += -= *= /* %= <<= >>= &= ^= |=
-# # 		,
-# # 		return while do for
-# # 		;
-# # 	);
-# # 	
-# # 	foreach my $token (map {quotemeta} @tokens)
-# # 	{
-# # 		$root = splitSubnodesOnRegex($root, qr/^${token}$/);
-# # 	}
-# 	
-# # 	$root = splitSubnodesOnRegex($root, qr/^[\$_a-z0-9]+$/);
-# 
-# 	return $root;
-# }
-# 
 
 sub splitSubnodesOnTokens
 {

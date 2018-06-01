@@ -1,6 +1,15 @@
 # C<span style="margin-left:-0.3em;font-size:70%;vertical-align: 10%;">♭</span>
 
-C<span style="margin-left:-0.25em;font-size:70%;vertical-align: 9%;">♭</span> (C Flat) is a style of C that prioritises easy parsing over human readability.
+C<span style="margin-left:-0.25em;font-size:70%;vertical-align: 9%;">♭</span> (C Flat) is a style of C that prioritises easy parsing over human readability. 
+
+It performs this feat by simplifying C's grammar down so that it only requires a simple set of rules and operations. Here's a summary of most of the rules:
+
+1. C<span style="margin-left:-2px;font-size:70%;vertical-align: 1px;">♭</span> is strict subset of C.
+1. <code class="language-c">/* ... */</code> and <code class="language-c">// ...</code> are checked for first.
+1.  <code class="language-c">( ... )</code>, <code class="language-c">{ ... }</code> and <code class="language-c">( ... )</code> MUST be matched.
+1. The characters `()[]{}` can not be used anywhere else accept in comments.
+1. All statements end with `;`. This includes `if`, `while`, `for` statements.
+
 
 Many IDEs show a modified version of the raw source. For example:
 
@@ -30,13 +39,3 @@ Observable.just("Hello, world!")
 
 ```
 (via [Envato Tuts+](https://code.tutsplus.com/tutorials/java-8-for-android-cleaner-code-with-lambda-expressions--cms-29661))
-
- 
-
-1. C<span style="margin-left:-2px;font-size:70%;vertical-align: 1px;">♭</span> is strict subset of C.
-1. <code class="language-c">/* ... */</code> and <code class="language-c">// ...</code> are checked for first.
-1.  <code class="language-c">( ... )</code>, <code class="language-c">{ ... }</code> and <code class="language-c">( ... )</code> MUST be matched.
-1. The characters `()[]{}` can not be used anywhere else accept in comments.
-<!--4. All variables MUST be prefixed with `$`.
--->
-
