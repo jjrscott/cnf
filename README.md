@@ -1,6 +1,5 @@
 # C Normal Form
 
-
 C Normal Form is an ongoing attempt to create a style of C that prioritises trivial machine parsing over human readability. 
 
 It performs this feat by simplifying C's grammar down so that it only requires a simple set of rules and operations. 
@@ -10,14 +9,14 @@ For example, All statements must end with `;`. This includes `if`, `while`, `for
 ```c
 int main(void)
 {
-	if (5)
-	{
-		return(10);
-	}
-	else
-	{
-		return(5);
-	};
+   if (5)
+   {
+      return(10);
+   }
+   else
+   {
+      return(5);
+   };
 };
 ```
 
@@ -37,8 +36,6 @@ Many IDEs show a modified version of the raw source. Below are a few of the visu
 
 [FiraCode](https://github.com/tonsky/FiraCode) uses [typographical ligatures](https://en.wikipedia.org/wiki/Typographic_ligature) to display <code class="language-c token operator">&gt;=</code> as <code class="language-c token operator">≥</code>. 
 
-
-
 #### Lamda expressions
 
 Android Studio displays Runnables as lamda expressions. So
@@ -46,10 +43,10 @@ Android Studio displays Runnables as lamda expressions. So
 ```java
 Observable.just("Hello, world!")  
    .subscribe(new Action1<String>() {
-       @Override
-       public void call(String s) {
-           Log.d(TAG, s);
-       }
+      @Override
+      public void call(String s) {
+         Log.d(TAG, s);
+      }
    });
 ```
 

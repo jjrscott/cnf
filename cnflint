@@ -1,7 +1,7 @@
 #!/usr/bin/perl -CS
 
-# This script tests that the given files compile using clang and is valid c♭.
-# $ cblint <file(s) to test>
+# This script tests that the given files compile using clang and is valid cnf.
+# $ cnflint <file(s) to test>
 
 use utf8;
 use strict;
